@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'me.omico.gfw_whitelist'
+version '1.0.0'
+
+ext.commitToolVersion = version
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
+
+task fatJar(type: Jar, dependsOn: 'compileJava') {
+    from files(sourceSets.main.output.classesDirs)
+    from configurations.runtimeClasspath.asFileTree.files.collect { zipTree(it) }
+    manifest {
+        attributes 'Implementation-Version': commitToolVersion
+        attributes 'Main-Class': 'me.omico.gfw_whitelist.CommitTool'
+    }
+}
